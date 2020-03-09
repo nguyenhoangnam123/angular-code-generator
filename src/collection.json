@@ -1,0 +1,34 @@
+{
+  "$schema": "../node_modules/@angular-devkit/schematics/collection-schema.json",
+  "schematics": {
+    "angular-generator": {
+      "description": "A blank schematic.",
+      "factory": "./angular-generator/index#angularGenerator"
+    },
+    "service": {
+      "description": "A blank schematic.",
+      "factory": "./service/index#service",
+      "schema": "./service/schema.json"
+    },
+    "component": {
+      "description": "A blank schematic.",
+      "factory": "./component/index#component"
+    },
+    "model": {
+      "description": "A blank schematic.",
+      "factory": "./model/index#model"
+    },
+    "interface": {
+      "description": "A blank schematic.",
+      "factory": "./interface/index#interfaceGenerator"
+    },
+    "datasource": {
+      "description": "A blank schematic.",
+      "factory": "./datasource/index#datasource"
+    },
+    "module": {
+      "description": "A blank schematic.",
+      "factory": "./module/index#module"
+    }
+  }
+}

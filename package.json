@@ -1,0 +1,29 @@
+{
+  "name": "angular-generator",
+  "version": "0.0.0",
+  "description": "A blank schematics",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "npm run build && jasmine src/**/*_spec.js",
+    "build:watch": "tsc -p tsconfig.json --watch"
+  },
+  "keywords": [
+    "schematics"
+  ],
+  "author": "",
+  "license": "MIT",
+  "schematics": "./src/collection.json",
+  "dependencies": {
+    "@angular-devkit/core": "^9.0.1",
+    "@angular-devkit/schematics": "^9.0.1",
+    "@schematics/angular": "^9.0.5",
+    "@types/pluralize": "0.0.29",
+    "pluralize": "^8.0.0",
+    "typescript": "~3.7.4"
+  },
+  "devDependencies": {
+    "@types/node": "^12.11.1",
+    "@types/jasmine": "~3.5.0",
+    "jasmine": "^3.5.0"
+  }
+}
