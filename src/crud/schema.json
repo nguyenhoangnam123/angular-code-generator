@@ -1,0 +1,49 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "id": "serviceSchema",
+  "title": "Creates a crud schematic.",
+  "type": "object",
+  "properties": {
+    "project": {
+      "type": "string",
+      "description": "The name of the project.",
+      "$default": {
+        "$source": "projectName"
+      }
+    },
+    "path": {
+      "type": "string",
+      "format": "path",
+      "description": "The path to create the service schematic within.",
+      "visible": false
+    },
+    "name": {
+      "description": "Specifies the name of the generated service.",
+      "type": "string",
+      "$default": {
+        "$source": "argv",
+        "index": 0
+      }
+    },
+    "action": {
+      "description": "Specifies the action to create component.",
+      "type": "string",
+      "$default": {
+        "$source": "argv",
+        "index": 1
+      }
+    },
+    "spec": {
+      "type": "boolean",
+      "description": "Specifies if a spec file is generated.",
+      "default": true
+    },
+    "flat": {
+      "type": "boolean",
+      "description": "Flag to indicate if a directory is created.",
+      "default": false
+    }
+  },
+  "required": ["name"],
+  "additionalProperties": false
+}

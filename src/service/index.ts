@@ -29,7 +29,6 @@ export function service(options: Schema): Rule {
       }),
       move(movePath)
     ]);
-
     // setup merge rule then return it
     return rule(tree, _context);
   };

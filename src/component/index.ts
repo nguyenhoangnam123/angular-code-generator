@@ -1,10 +1,52 @@
-import { Rule, SchematicContext, Tree } from '@angular-devkit/schematics';
-
+import {
+  Rule,
+  SchematicContext,
+  Tree,
+  noop,
+  filter,
+  move,
+  template,
+  chain,
+  url,
+  Source
+} from '@angular-devkit/schematics';
+import { setupOptions } from '../utils/setup';
+import { pathToMove } from '../utils/movePath';
+import { applyWithOverwrite } from '../utils/mergeStrategy';
+import { strings } from '../utils/strings';
+import objInterface from '../model/model';
 
 // You don't have to export the function as default. You can also have more than one rule factory
 // per file.
-export function component(_options: any): Rule {
-  return (tree: Tree, _context: SchematicContext) => {
-    return tree;
+export function component(options: any): Rule {
+  return (host: Tree, context: SchematicContext) => {
+    setupOptions(host, options);
+    // setup move path
+    const movePath = pathToMove(options);
+
+    let source: Source = url('./files');
+    if (options.action === 'edit') {
+      source = url('./files/edit');
+    }
+    if (options.action === 'detail') {
+      source = url('./files/detail');
+    }
+    if (options.action === 'list') {
+      source = url('./files/list');
+    }
+
+    //setup json model for obj
+    options.obj = objInterface ? JSON.stringify(objInterface) : options.obj;
+
+    const componentRule = applyWithOverwrite(source, [
+      options.spec ? noop() : filter(path => !path.endsWith('.spec.ts')),
+      template({
+        ...strings,
+        ...options
+      }),
+      move(movePath)
+    ]);
+    const rule = chain([componentRule]);
+    return rule(host, context);
   };
 }

@@ -1,0 +1,209 @@
+<kt-portlet>
+  <kt-portlet-header
+    [title]="'Quản lý <%= classify(name)%>'"
+    [class]="'kt-portlet__head--lg'"
+    [viewLoading$]="dataSource.loading$"
+  >
+  </kt-portlet-header>
+
+  <kt-portlet-body>
+    <!-- start search form -->
+    <div class="kt-portlet__preview kt-margin-b-30">
+      <div class="kt-section__content">
+        <mat-accordion>
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                Tìm kiếm <%= classify(name)%>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+
+            <!-- form begin -->
+            <form
+              *ngIf="form"
+              [formGroup]="form"
+              class="kt-form"
+              novalidate
+              (ngSubmit)="search(form.value)"
+            >
+              <div class="kt-form__group">
+                <div class="row">
+                  <% Object.keys(JSON.parse(obj)).forEach(key => { %> <% if
+                  (JSON.parse(obj)[key]['display'] === true && key !== 'stt' &&
+                  JSON.parse(obj)[key]['isPrimitive'] === true) { %>
+                  <div class="col-md-6 kt-margin-bottom-10-mobile">
+                    <mat-form-field class="mat-form-field-fluid">
+                      <mat-label><%= key %></mat-label>
+                      <input
+                        matInput
+                        placeholder="<%= key %>"
+                        formControlName="<%= key %>"
+                        id="<%= key %>"
+                      />
+                      <mat-error
+                        *ngFor="let validation of validationMessage.<%= key %>"
+                      >
+                        <mat-error
+                          *ngIf="
+                            form.get('<%= key %>').hasError(validation.type) &&
+                            (form.get('<%= key %>').dirty ||
+                              form.get('<%= key %>').touched)
+                          "
+                        >
+                          <strong>{{ validation.message }}</strong>
+                        </mat-error>
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                  <% } %> <% }) %>
+                </div>
+              </div>
+              <div class="kt-form__group--inline float-right">
+                <button
+                  mat-raised-button
+                  color="primary"
+                  [disabled]="!form.valid"
+                >
+                  Tìm kiếm
+                </button>
+                <button
+                  type="button"
+                  mat-raised-button
+                  color="warn"
+                  (click)="onCancel()"
+                >
+                  Đặt lại
+                </button>
+              </div>
+            </form>
+          </mat-expansion-panel>
+        </mat-accordion>
+      </div>
+    </div>
+    <!-- end search form -->
+    <div
+      style="box-shadow:0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12)"
+    >
+      <mat-card>
+        <mat-card-content>
+          <ng-container>
+            <div class="d-flex flex-row">
+              <button
+                (click)="create()"
+                mat-raised-button
+                matTooltip="Tạo mới <%= singularize(name) %>"
+                color="primary"
+                type="button"
+              >
+                <span>Thêm mới</span>
+              </button>
+            </div>
+          </ng-container>
+          <ng-container>
+            <div
+              perfectScrollbar
+              [ngStyle]="{ 'max-height': '60vh', position: 'relative' }"
+              class="mat-table__wrapper mat-table__wrapper--dashboard mb-4"
+            >
+              <!-- table -->
+              <table
+                mat-table
+                class="lmat-elevation-z8"
+                [dataSource]="dataSource"
+                matSort
+                matSortActive="id"
+                matSortDirection="asc"
+                matSortDisableClear
+              >
+                <% Object.keys(JSON.parse(obj)).forEach(key => { %> <% if
+                (JSON.parse(obj)[key]['display'] === true &&
+                JSON.parse(obj)[key]['isPrimitive'] === true) { %>
+                <ng-container matColumnDef="<%= key %>">
+                  <th mat-header-cell *matHeaderCellDef>
+                    <%= capitalize(key) %>
+                  </th>
+                  <td
+                    mat-cell
+                    *matCellDef="let <%= singularize(name) %>"
+                    class="mat-column-vinCode"
+                  >
+                    {{ <%= singularize(name) %>.<%= key %> }}
+                  </td>
+                </ng-container>
+                <% } %> <% }) %>
+
+                <ng-container matColumnDef="actions">
+                  <th
+                    mat-header-cell
+                    *matHeaderCellDef
+                    width="300px"
+                    class="kt-pl-13"
+                  >
+                    Thao tác
+                  </th>
+                  <td mat-cell *matCellDef="let <%= singularize(name) %>">
+                    <button
+                      mat-icon-button
+                      color="primary"
+                      matTooltip="Xem thông tin"
+                      (click)="view(<%= singularize(name) %>)"
+                    >
+                      <mat-icon>visibility</mat-icon>
+                    </button>
+                    <button
+                      mat-icon-button
+                      color="primary"
+                      matTooltip="Sửa thông tin"
+                      (click)="edit(<%= singularize(name) %>)"
+                    >
+                      <mat-icon>create</mat-icon>
+                    </button>
+                    <button
+                      mat-icon-button
+                      color="warn"
+                      type="button"
+                      matTooltip="Xóa thông tin"
+                      (click)="deleteItem(<%= singularize(name) %>)"
+                    >
+                      <mat-icon>delete</mat-icon>
+                    </button>
+                  </td>
+                </ng-container>
+
+                <tr
+                  mat-header-row
+                  *matHeaderRowDef="displayedColumns; sticky: true"
+                ></tr>
+                <tr
+                  mat-row
+                  *matRowDef="let row; columns: displayedColumns"
+                ></tr>
+              </table>
+
+              <!-- end table -->
+              <!-- table message if no record found-->
+              <div class="mat-table__message" *ngIf="!dataSource.hasItems">
+                Không có bản ghi nào
+              </div>
+            </div>
+
+            <!-- start: BOTTOM -->
+            <div class="mat-table__bottom mat-table__bottom--padding">
+              <mat-spinner
+                [diameter]="20"
+                *ngIf="dataSource.loading$ | async"
+              ></mat-spinner>
+              <mat-paginator
+                [pageSize]="1"
+                [pageSizeOptions]="[5, 10, 15, 50]"
+                [length]="dataSource.paginatorTotal$ | async"
+                [showFirstLastButtons]="true"
+              ></mat-paginator>
+              <!-- end: BOTTOM -->
+            </div>
+          </ng-container>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </kt-portlet-body>
+</kt-portlet>

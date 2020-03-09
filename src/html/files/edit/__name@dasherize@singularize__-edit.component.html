@@ -1,0 +1,100 @@
+<div
+  class="kt-portlet"
+  [ngClass]="{
+    'kt-portlet--body-progress': viewLoading,
+    'kt-portlet--body-progress-overlay': loadingAfterSubmit
+  }"
+>
+  <!-- start title -->
+  <div
+    class="kt-portlet__head kt-portlet__head__custom"
+    *ngIf="<%= singularize(name) %>"
+  >
+    <div class="kt-portlet__head-label">
+      <h3 class="kt-portlet__head-title">{{ title }}</h3>
+    </div>
+  </div>
+  <!-- end title -->
+  <div *ngIf="<%= singularize(name) %>">
+    <div class="kt-form">
+      <div class="kt-portlet__body">
+        <form
+          [formGroup]="form"
+          class="kt-form kt-form--group-seperator-dashed"
+          *ngIf="form"
+        >
+          <kt-alert
+            *ngIf="hasFormErrors"
+            type="warn"
+            [showCloseButton]="true"
+            [duration]="10000"
+            (close)="onAlertClose($event)"
+          >
+            Có lỗi xảy ra
+          </kt-alert>
+
+          <div class="kt-form__section kt-form__section--first">
+            <div class="kt-form__group">
+              <div class="row mb-4">
+                <% Object.keys(JSON.parse(obj)).forEach(key => { %> <% if
+                (JSON.parse(obj)[key]['display'] === true && key !== 'stt' &&
+                JSON.parse(obj)[key]['isPrimitive'] === true) { %>
+                <div class="col-md-6 kt-margin-bottom-10-mobile">
+                  <mat-form-field class="mat-form-field-fluid">
+                    <input
+                      matInput
+                      placeholder="<%= key %>"
+                      formControlName="<%= key %>"
+                      id="<%= key %>"
+                    />
+                    <mat-error
+                      *ngFor="let validation of validationMessage.<%= key %>"
+                    >
+                      <mat-error
+                        *ngIf="
+                          form.get('<%= key %>').hasError(validation.type) &&
+                          (form.get('<%= key %>').dirty ||
+                            form.get('<%= key %>').touched)
+                        "
+                      >
+                        <strong>{{ validation.message }}</strong>
+                      </mat-error>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+                <% } %> <% }) %>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="kt-portlet__foot kt-portlet__foot--fit kt-portlet__no-border">
+        <div class="kt-form__actions kt-form__actions--solid">
+          <div class="row text-right">
+            <div class="col-lg-12">
+              <button
+                type="button"
+                mat-raised-button
+                (click)="close()"
+                cdkFocusInitial
+                matTooltip="Hủy thay đổi"
+              >
+                Hủy bỏ</button
+              >&nbsp;
+              <button
+                type="button"
+                mat-raised-button
+                color="primary"
+                (click)="onSubmit()"
+                matTooltip="Lưu thay đổi"
+                [disabled]="!form.valid"
+              >
+                Lưu lại
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
