@@ -12,11 +12,13 @@
     },
     "component": {
       "description": "A blank schematic.",
-      "factory": "./component/index#component"
+      "factory": "./component/index#component",
+      "schema": "./component/schema.json"
     },
     "model": {
       "description": "A blank schematic.",
-      "factory": "./model/index#model"
+      "factory": "./model/index#model",
+      "schema": "./model/schema.json"
     },
     "interface": {
       "description": "A blank schematic.",
@@ -24,19 +26,23 @@
     },
     "datasource": {
       "description": "A blank schematic.",
-      "factory": "./datasource/index#datasource"
+      "factory": "./datasource/index#datasource",
+      "schema": "./datasource/schema.json"
     },
     "module": {
       "description": "A blank schematic.",
-      "factory": "./module/index#module"
+      "factory": "./module/index#module",
+      "schema": "./module/schema.json"
     },
     "html": {
       "description": "A blank schematic.",
-      "factory": "./html/index#html"
+      "factory": "./html/index#html",
+      "schema": "./html/schema.json"
     },
     "crud": {
       "description": "A blank schematic.",
-      "factory": "./crud/index#crud"
+      "factory": "./crud/index#crud",
+      "schema": "./crud/schema.json"
     }
   }
 }

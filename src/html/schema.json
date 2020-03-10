@@ -26,12 +26,11 @@
       }
     },
     "action": {
-      "description": "Specifies the action to create component.",
+      "description": "Specifies the action to create html.",
       "type": "string",
-      "$default": {
-        "$source": "argv",
-        "index": 1
-      }
+      "default": "all",
+      "enum": ["all", "edit", "detail", "list"],
+      "x-prompt": "Which type of html would you like to generate?"
     },
     "flat": {
       "type": "boolean",

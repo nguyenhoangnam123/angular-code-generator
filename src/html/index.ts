@@ -25,31 +25,60 @@ export function html(options: any): Rule {
     // setup move path
     const movePath = pathToMove(options);
 
-    let source: Source = url('./files');
-    if (options.action === 'edit') {
-      source = url('./files/edit');
-    }
-    if (options.action === 'detail') {
-      source = url('./files/detail');
-    }
-    if (options.action === 'list') {
-      source = url('./files/list');
-    }
-
     //setup json model for obj
     options.obj = objInterface ? JSON.stringify(objInterface) : options.obj;
 
-    // get rule for model, apply with override if file exists
-    const modelRule = applyWithOverwrite(source, [
-      options.spec ? noop() : filter(path => !path.endsWith('.spec.ts')),
-      template({
-        ...strings,
-        ...options
-      }),
-      move(movePath)
-    ]);
+    const ruleList: Rule[] = [];
+    const { name, path, flat } = options;
+    const detailRule: Rule = ruleFactory(
+      url('./files/detail'),
+      options,
+      pathToMove({ name, path, flat, action: 'detail' })
+    );
+    const editRule: Rule = ruleFactory(
+      url('./files/edit'),
+      options,
+      pathToMove({ name, path, flat, action: 'edit' })
+    );
+    const listRule: Rule = ruleFactory(url('./files/list'), options, movePath);
 
-    const rule = chain([modelRule]);
+    switch (options.action) {
+      case 'edit': {
+        ruleList.push(editRule);
+        break;
+      }
+      case 'list': {
+        ruleList.push(listRule);
+        break;
+      }
+      case 'detail': {
+        ruleList.push(detailRule);
+        break;
+      }
+      case 'all': {
+        ruleList.push(listRule);
+        ruleList.push(detailRule);
+        ruleList.push(editRule);
+        break;
+      }
+      default: {
+        ruleList.push(listRule);
+        break;
+      }
+    }
+
+    const rule = chain(ruleList);
     return rule(host, context);
   };
+}
+
+function ruleFactory(source: Source, options: any, movePath: string): Rule {
+  return applyWithOverwrite(source, [
+    options.spec ? noop() : filter(path => !path.endsWith('.spec.ts')),
+    template({
+      ...strings,
+      ...options
+    }),
+    move(movePath)
+  ]);
 }

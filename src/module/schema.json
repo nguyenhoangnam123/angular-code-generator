@@ -25,6 +25,13 @@
         "index": 0
       }
     },
+    "action": {
+      "description": "Specifies the action to create html.",
+      "type": "string",
+      "default": "all",
+      "enum": ["all", "edit", "detail", "list"],
+      "x-prompt": "Which components would you like to import in module?"
+    },
     "flat": {
       "type": "boolean",
       "description": "Flag to indicate if a dir is created.",

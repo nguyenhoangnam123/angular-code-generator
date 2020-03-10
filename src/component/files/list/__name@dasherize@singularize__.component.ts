@@ -32,11 +32,11 @@ export class <%= classify(name) %>Component implements OnInit, OnDestroy {
       <% if (JSON.parse(obj)[key]['display'] === true && key !== 'stt' && JSON.parse(obj)[key]['isPrimitive'] === true) { %>
           <%= key %>: [
             <% if(JSON.parse(obj)[key]['validate']) { %>
-              {
                 <% Object.keys(JSON.parse(obj)[key]['validate']).forEach(subkey => { %>
-                  <%= JSON.parse(obj)[key]['validate'][subkey]['type'] %>: '<%= JSON.parse(obj)[key]['validate'][subkey]['message'] %>',
-                <% }) %>
-              }
+                  {
+                  type: '<%= JSON.parse(obj)[key]['validate'][subkey]['type'] %>', message: '<%= JSON.parse(obj)[key]['validate'][subkey]['message'] %>',
+                  },
+                  <% }) %>
           <% } %>
         ],
       <% } %>
@@ -178,9 +178,18 @@ export class <%= classify(name) %>Component implements OnInit, OnDestroy {
    * @param _formValue: any
    */
   prepareSearchObject(_formValue): QueryParamsModelEGP {
-    const { login, email, firstname, ou, isActive } = _formValue;
-    const filterFields: any = { login, email, firstname, ou: ou ? ou : '', isActive: isActive ? '1' : '0' };
-    console.log('filter: ', filterFields);
+    const { 
+      <% Object.keys(JSON.parse(obj)).forEach(key => { %>
+        <% if (JSON.parse(obj)[key]['display'] === true && key !== 'stt' && JSON.parse(obj)[key]['isPrimitive'] === true) { %>
+            <%= key %>,
+        <% } %>
+      <% }) %>
+     } = _formValue;
+    const filterFields: any = {<% Object.keys(JSON.parse(obj)).forEach(key => { %>
+      <% if (JSON.parse(obj)[key]['display'] === true && key !== 'stt' && JSON.parse(obj)[key]['isPrimitive'] === true) { %>
+          <%= key %>,
+      <% } %>
+    <% }) %>};
     const searchObject = new QueryParamsModelEGP(filterFields, this.paginator.pageIndex, 'Id', false, this.paginator.pageSize);
     return searchObject;
   }

@@ -1,28 +1,72 @@
-# Getting Started With Schematics
+# Angular Generator based on Metronic Theme
 
-This repository is a basic Schematic implementation that serves as a starting point to create and publish Schematics to NPM.
+=======================
 
-### Testing
+### Setup
 
-To test locally, install `@angular-devkit/schematics-cli` globally and use the `schematics` command line tool. That tool acts the same as the `generate` command of the Angular CLI, but also has a debug mode.
+=======================
+Requirement: Nodejs 10.x
+Setup: cd path/to/angular-generator
+Install angular-cli globally: npm i @angular/cli -g
+Install dependencies: npm install
+Build: npm run build
 
-Check the documentation with
-```bash
-schematics --help
-```
+==============================
 
-### Unit Testing
+### Angular Jhipster Structure
 
-`npm run test` will run the unit tests, using Jasmine as a runner and test framework.
+==============================
 
-### Publishing
+- src
+  - main
+    - webapp
+      - app
+        - views
+          - pages
+            - (generated module)
+              - (generated subcomponent folder)
+                - (generated component)
+                - (generated html)
+              - (generated model)
+              - (generated datasource)
+              - (generated component)
+              - (generated html)
+              - (generated module)
 
-To publish, simply do:
+============================
 
-```bash
-npm run build
-npm publish
-```
+### Angular Jhipster Linking
 
-That's it!
- 
+============================
+
+- You should link Angular Jhipster project to angular-code-generator to use its features
+- Run: npm link path/to/angular-generator (Eg: npm link ../angular-generator)
+
+=======================
+
+### Model and Interface
+
+=======================
+
+- Manifest: you should modify manifest model file before running any command line (path: angular-generator/src/model/model.ts)
+- Model: generated class from manifest, including its typescript interface (Eg: Test, ITest)
+- Note: model should be generated first before generating other pieces
+- Run: ng g angular-generator:model --name=<name> (Eg: ng g angular-generator:model --name=test -> src/main/webapp/app/views/pages/test/test.model.ts)
+
+### Service
+
+- Note: a class which default has getAll, findById, delete, createOrUpdate, getPaging methods
+- Run: ng g angular-generator:service --name=<name> (Eg: ng g angular-generator:service --name=test -> src/main/webapp/app/views/pages/test/test.service.ts)
+
+### Datasource
+
+- Note: a class which has methods subscribing service methods by name, also create message Subjects for subscriptions
+- Run: ng g angular-generator:datasource --name=<name> (Eg: ng g angular-generator:datasource --name=test -> src/main/webapp/app/views/pages/test/test.datasource.ts)
+
+### Component
+
+### Html
+
+### Module
+
+### Crud

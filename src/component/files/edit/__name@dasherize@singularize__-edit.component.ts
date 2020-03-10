@@ -29,11 +29,11 @@ export class <%= classify(name) %>EditComponent {
       <% if (JSON.parse(obj)[key]['display'] === true && key !== 'stt' && JSON.parse(obj)[key]['isPrimitive'] === true) { %>
           <%= key %>: [
             <% if(JSON.parse(obj)[key]['validate']) { %>
-              {
                 <% Object.keys(JSON.parse(obj)[key]['validate']).forEach(subkey => { %>
-                  <%= JSON.parse(obj)[key]['validate'][subkey]['type'] %>: '<%= JSON.parse(obj)[key]['validate'][subkey]['message'] %>',
+                  {
+                    type: '<%= JSON.parse(obj)[key]['validate'][subkey]['type'] %>', message: '<%= JSON.parse(obj)[key]['validate'][subkey]['message'] %>',
+                  },
                 <% }) %>
-              }
           <% } %>
         ],
       <% } %>
@@ -182,12 +182,11 @@ export class <%= classify(name) %>EditComponent {
   prepare(): IEntity {
     const controls = this.form.controls;
     const item = Object.assign({}, this.<%= singularize(name) %>);
-    item.login = controls.login.value;
-    item.email = controls.email.value;
-    item.firstName = controls.firstName.value;
-    item.phoneNumber = controls.phone.value;
-    item.isActive = controls.isActive.value;
-    item.description = controls.description.value;
+    <% Object.keys(JSON.parse(obj)).forEach(key => { %>
+      <% if (JSON.parse(obj)[key]['display'] === true && key !== 'stt' && JSON.parse(obj)[key]['isPrimitive'] === true) { %>
+          item.<%= key %> = controls.<%= key %>.value; 
+      <% } %>
+    <% }) %>
     item.updatedBy = 'admin';
     if (!item.id) {
       // menu.createdBy = this.currentUser.username ? this.currentUser.username : 'admin';
